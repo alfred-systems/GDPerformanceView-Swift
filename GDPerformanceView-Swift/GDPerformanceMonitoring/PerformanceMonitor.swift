@@ -24,7 +24,7 @@ import UIKit
 
 // MARK: Class Definition
 
-public class PerformanceMonitor {
+@objc public class PerformanceMonitor: NSObject {
     
     // MARK: Enums
     
@@ -114,6 +114,7 @@ public class PerformanceMonitor {
     ///   - style: Style. Allows to change the appearance of the displayed information.
     ///   - delegate: Performance monitor output.
     required public init(options: DisplayOptions = .default, style: Style = .dark, delegate: PerformanceMonitorDelegate? = nil) {
+        super.init()
         self.performanceView.options = options
         self.performanceView.style = style
         
@@ -145,15 +146,15 @@ public class PerformanceMonitor {
 // MARK: Public Methods
 
 public extension PerformanceMonitor {
-    func hide() {
+    @objc func hide() {
         self.performanceView.hide()
     }
     
-    func show() {
+    @objc func show() {
         self.performanceView.show()
     }
     
-    func start() {
+    @objc func start() {
         switch self.state {
         case .started:
             return
@@ -163,7 +164,7 @@ public extension PerformanceMonitor {
         }
     }
     
-    func pause() {
+    @objc func pause() {
         switch self.state {
         case .paused:
             return
