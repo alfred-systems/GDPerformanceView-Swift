@@ -66,7 +66,7 @@ public class PerformanceMonitor {
         public static let system = DisplayOptions(rawValue: 1 << 4)
         
         /// Default dispaly options - CPU usage and FPS, application version with build number and system name with version.
-        public static let `default`: DisplayOptions = [.performance, .application, .system]
+        public static let `default`: DisplayOptions = [.performance, .application, .system, .memory]
         
         /// All dispaly options.
         public static let all: DisplayOptions = [.performance, .memory, .application, .device, .system]

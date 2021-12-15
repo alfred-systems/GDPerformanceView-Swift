@@ -72,6 +72,11 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
     private let monitoringTextLabel = MarginLabel()
     private var staticInformation: String?
     private var userInformation: String?
+    private lazy var panGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(dragged(_:)))
+        addGestureRecognizer(gesture)
+        return gesture
+    }()
     
     // MARK: Init Methods & Superclass Overriders
     
@@ -84,6 +89,8 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
         self.configureWindow()
         self.configureMonitoringTextLabel()
         self.subscribeToNotifications()
+        
+        interactors = [panGesture]
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -109,6 +116,13 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
             return false
         }
         return super.point(inside: point, with: event)
+    }
+    
+    
+    @objc private func dragged(_ sender:UIPanGestureRecognizer){
+        let translation = sender.translation(in: self)
+        self.center = CGPoint(x: self.center.x + translation.x, y: self.center.y + translation.y)
+        sender.setTranslation(CGPoint.zero, in: self)
     }
     
     deinit {
@@ -344,19 +358,7 @@ private extension PerformanceView {
             return .zero
         }
         
-        var topInset: CGFloat = 0.0
-        if #available(iOS 11.0, *), let safeAreaTop = window.rootViewController?.view.safeAreaInsets.top {
-            if safeAreaTop > 0.0 {
-                if safeAreaTop > Constants.defaultStatusBarHeight {
-                    topInset = safeAreaTop - Constants.safeAreaInsetDifference
-                } else {
-                    topInset = safeAreaTop - Constants.defaultStatusBarHeight
-                }
-            } else {
-                topInset = safeAreaTop
-            }
-        }
-        return CGRect(x: 0.0, y: topInset, width: window.bounds.width, height: height)
+        return CGRect(x: 0.0, y: 100.0, width: window.bounds.width, height: height)
     }
 
     class func keyWindow() -> UIWindow? {
