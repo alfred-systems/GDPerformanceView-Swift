@@ -131,7 +131,7 @@ import UIKit
     /// Initializes performance monitor singleton with default properties.
     ///
     /// - Returns: Performance monitor singleton.
-    public class func shared() -> PerformanceMonitor {
+    @objc public class func shared() -> PerformanceMonitor {
         if self.sharedPerformanceMonitor == nil {
             self.sharedPerformanceMonitor = PerformanceMonitor()
         }
