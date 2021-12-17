@@ -42,6 +42,7 @@ internal class PerformanceCalculator {
     private var displayLink: CADisplayLink!
     private let linkedFramesList = LinkedFramesList()
     private var startTimestamp: TimeInterval?
+    private var previousGetInfoTimestamp: TimeInterval?
     private var accumulatedInformationIsEnough = false
     
     // MARK: Init Methods & Superclass Overriders
@@ -81,11 +82,12 @@ private extension PerformanceCalculator {
 
 private extension PerformanceCalculator {
     func takePerformanceEvidence() {
-        if self.accumulatedInformationIsEnough {
+        if self.accumulatedInformationIsEnough, Date().timeIntervalSince1970 - (previousGetInfoTimestamp ?? 0.0) >= Constants.accumulationTimeInSeconds {
             let cpuUsage = self.cpuUsage()
             let fps = self.linkedFramesList.count
             let memoryUsage = self.memoryUsage()
             self.report(cpuUsage: cpuUsage, fps: fps, memoryUsage: memoryUsage)
+            previousGetInfoTimestamp = Date().timeIntervalSince1970
         } else if let start = self.startTimestamp, Date().timeIntervalSince1970 - start >= Constants.accumulationTimeInSeconds {
             self.accumulatedInformationIsEnough = true
         }

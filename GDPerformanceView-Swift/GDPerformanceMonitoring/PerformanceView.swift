@@ -69,6 +69,8 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
     
     // MARK: Private Properties
     
+    private var memoryTuple = (min: Double.infinity, max: 0.0)
+    private var cpuTuple = (min: Double.infinity, max: 0.0)
     private let monitoringTextLabel = MarginLabel()
     private var staticInformation: String?
     private var userInformation: String?
@@ -77,6 +79,7 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
         addGestureRecognizer(gesture)
         return gesture
     }()
+    private var dragged = false
     
     // MARK: Init Methods & Superclass Overriders
     
@@ -120,6 +123,7 @@ internal class PerformanceView: UIWindow, PerformanceViewConfigurator {
     
     
     @objc private func dragged(_ sender:UIPanGestureRecognizer){
+        dragged = true
         let translation = sender.translation(in: self)
         self.center = CGPoint(x: self.center.x + translation.x, y: self.center.y + translation.y)
         sender.setTranslation(CGPoint.zero, in: self)
@@ -149,26 +153,45 @@ internal extension PerformanceView {
     func update(withPerformanceReport report: PerformanceReport) {
         var monitoringTexts: [String] = []
         if self.options.contains(.performance) {
-            let performance = String(format: "CPU: %.1f%%, FPS: %d", report.cpuUsage, report.fps)
+            monitoringTexts.append("------- CPU -------")
+            let performance = String(format: "Current: %.1f%%", report.cpuUsage)
             monitoringTexts.append(performance)
+            
+            cpuTuple.min = min(cpuTuple.min, report.cpuUsage)
+            cpuTuple.max = max(cpuTuple.max, report.cpuUsage)
+            monitoringTexts.append(String(format: "Max: %.1f%%", cpuTuple.max))
+            monitoringTexts.append(String(format: "Min: %.1f%%", cpuTuple.min))
         }
         
         if self.options.contains(.memory) {
+            monitoringTexts.append("----- Memory ------")
             let bytesInMegabyte = 1024.0 * 1024.0
             let usedMemory = Double(report.memoryUsage.used) / bytesInMegabyte
             let totalMemory = Double(report.memoryUsage.total) / bytesInMegabyte
             let memory = String(format: "%.1f of %.0f MB used", usedMemory, totalMemory)
             monitoringTexts.append(memory)
+            
+            memoryTuple.min = min(memoryTuple.min, usedMemory)
+            memoryTuple.max = max(memoryTuple.max, usedMemory)
+            
+            let maxMemoryString = String(format: "Max: %.1f MB", memoryTuple.max)
+            let minMemoryString = String(format: "Min: %.1f MB", memoryTuple.min)
+            monitoringTexts.append(maxMemoryString)
+            monitoringTexts.append(minMemoryString)
         }
         
         if let staticInformation = self.staticInformation {
+            monitoringTexts.append("-------------------")
             monitoringTexts.append(staticInformation)
         }
         
         if let userInformation = self.userInformation {
+            monitoringTexts.append("-------------------")
             monitoringTexts.append(userInformation)
         }
+        monitoringTexts.append("-------------------")
         
+        self.monitoringTextLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 13)
         self.monitoringTextLabel.text = (monitoringTexts.count > 0 ? monitoringTexts.joined(separator: "\n") : nil)
         self.showViewAboveStatusBarIfNeeded()
         self.layoutMonitoringLabel()
@@ -282,7 +305,9 @@ private extension PerformanceView {
 
 private extension PerformanceView {
     func layoutWindow() {
-        self.frame = PerformanceView.windowFrame(withPrefferedHeight: self.monitoringTextLabel.bounds.height)
+        if !dragged {
+            self.frame = PerformanceView.windowFrame(withPrefferedHeight: self.monitoringTextLabel.bounds.height)
+        }
         self.layoutMonitoringLabel()
     }
     
