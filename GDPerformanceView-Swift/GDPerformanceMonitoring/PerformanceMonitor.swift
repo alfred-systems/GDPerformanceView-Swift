@@ -118,9 +118,15 @@ import UIKit
         self.performanceView.options = options
         self.performanceView.style = style
         
-        self.performanceCalculator.onReport = { [weak self] (performanceReport) in
+//        self.performanceCalculator.onReport = { [weak self] (performanceReport) in
+//            DispatchQueue.main.async {
+//                self?.apply(performanceReport: performanceReport)
+//            }
+//        }
+        
+        self.performanceCalculator.onReportV2 = { [weak self] (performanceReportV2) in
             DispatchQueue.main.async {
-                self?.apply(performanceReport: performanceReport)
+                self?.apply(performanceReport: performanceReportV2)
             }
         }
         
@@ -219,5 +225,9 @@ private extension PerformanceMonitor {
     func apply(performanceReport: PerformanceReport) {
         self.performanceView.update(withPerformanceReport: performanceReport)
         self.delegate?.performanceMonitor(didReport: performanceReport)
+    }
+    
+    func apply(performanceReport: PerformanceReportV2) {
+        self.performanceView.update(withPerformanceReport: performanceReport)
     }
 }

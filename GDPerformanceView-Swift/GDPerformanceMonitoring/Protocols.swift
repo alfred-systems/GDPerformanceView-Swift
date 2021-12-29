@@ -22,11 +22,38 @@
 
 import UIKit
 
+public struct CpuReport {
+    var usage: Double
+    var average: Double
+    var max: Double
+    var min: Double
+}
+
+public struct MemoryReport {
+    var usage: MemoryUsage
+    var average: Double
+    var max: Double
+    var min: Double
+}
+
+public struct ThermalReport {
+    public enum state {
+        case unsupported
+        case nominal
+        case fair
+        case serious
+        case critical
+    }
+    var state: state = .unsupported
+}
+
 /// Memory usage tuple. Contains used and total memory in bytes.
 public typealias MemoryUsage = (used: UInt64, total: UInt64)
 
 /// Performance report tuple. Contains CPU usage in percentages, FPS and memory usage.
 public typealias PerformanceReport = (cpuUsage: Double, fps: Int, memoryUsage: MemoryUsage)
+
+public typealias PerformanceReportV2 = (cpuReport: CpuReport, fps: Int, memoryReport: MemoryReport, thermalReport: ThermalReport)
 
 /// Performance monitor delegate. Gets called on the main thread.
 public protocol PerformanceMonitorDelegate: class {

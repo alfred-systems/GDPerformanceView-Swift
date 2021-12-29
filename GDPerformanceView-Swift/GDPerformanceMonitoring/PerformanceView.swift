@@ -147,6 +147,51 @@ internal extension PerformanceView {
         self.monitoringTextLabel.isHidden = false
     }
     
+    func update(withPerformanceReport report: PerformanceReportV2) {
+        var monitoringTexts: [String] = []
+        if self.options.contains(.performance) {
+            monitoringTexts.append("------- CPU -------")
+            let performance = String(format: "Current: %.1f%%", report.cpuReport.usage)
+            monitoringTexts.append(performance)
+            
+            monitoringTexts.append(String(format: "Max: %.1f%%", report.cpuReport.max))
+            monitoringTexts.append(String(format: "Min: %.1f%%", report.cpuReport.min))
+            monitoringTexts.append(String(format: "Avg: %.1f%%", report.cpuReport.average))
+        }
+        
+        if self.options.contains(.memory) {
+            monitoringTexts.append("----- Memory ------")
+            let bytesInMegabyte = 1024.0 * 1024.0
+            let usedMemory = Double(report.memoryReport.usage.used) / bytesInMegabyte
+            let totalMemory = Double(report.memoryReport.usage.total) / bytesInMegabyte
+            let memory = String(format: "%.1f of %.0f MB used", usedMemory, totalMemory)
+            monitoringTexts.append(memory)
+            
+            monitoringTexts.append(String(format: "Max: %.1f MB", report.memoryReport.min / bytesInMegabyte))
+            monitoringTexts.append(String(format: "Max: %.1f MB", report.memoryReport.max / bytesInMegabyte))
+            monitoringTexts.append(String(format: "Avg: %.1f MB", report.memoryReport.average / bytesInMegabyte))
+        }
+        
+        monitoringTexts.append("----- Thermal -----")
+        monitoringTexts.append(report.thermalReport.state.toString())
+        
+        if let staticInformation = self.staticInformation {
+            monitoringTexts.append("-------------------")
+            monitoringTexts.append(staticInformation)
+        }
+        
+        if let userInformation = self.userInformation {
+            monitoringTexts.append("-------------------")
+            monitoringTexts.append(userInformation)
+        }
+        
+        monitoringTexts.append("-------------------")
+        self.monitoringTextLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 13)
+        self.monitoringTextLabel.text = (monitoringTexts.count > 0 ? monitoringTexts.joined(separator: "\n") : nil)
+        self.showViewAboveStatusBarIfNeeded()
+        self.layoutMonitoringLabel()
+    }
+    
     /// Updates monitoring label with performance report.
     ///
     /// - Parameter report: Performance report.
@@ -399,5 +444,22 @@ private extension PerformanceView {
         return UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
             .first as? UIWindowScene
+    }
+}
+
+private extension ThermalReport.state {
+    func toString() -> String {
+        switch self {
+        case .unsupported:
+            return "Unsupported"
+        case .nominal:
+            return "Normal"
+        case .fair:
+            return "Slightly elevated"
+        case .serious:
+            return "High"
+        case .critical:
+            return "Critical"
+        }
     }
 }

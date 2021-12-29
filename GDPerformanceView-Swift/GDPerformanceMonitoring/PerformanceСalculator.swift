@@ -37,6 +37,8 @@ internal class PerformanceCalculator {
     
     internal var onReport: ((_ performanceReport: PerformanceReport) -> ())?
     
+    internal var onReportV2: ((_ performanceReport: PerformanceReportV2) -> ())?
+    
     // MARK: Private Properties
     
     private var displayLink: CADisplayLink!
@@ -44,6 +46,13 @@ internal class PerformanceCalculator {
     private var startTimestamp: TimeInterval?
     private var previousGetInfoTimestamp: TimeInterval?
     private var accumulatedInformationIsEnough = false
+    
+    private var reportCount = 0
+    private(set) var cpuAvgUsage: Double = 0
+    private(set) var memoryAvgUsage: UInt64 = 0
+    
+    private var lastCpuReport: CpuReport?
+    private var lastMemoryReport: MemoryReport?
     
     // MARK: Init Methods & Superclass Overriders
     
@@ -88,9 +97,34 @@ private extension PerformanceCalculator {
             let memoryUsage = self.memoryUsage()
             self.report(cpuUsage: cpuUsage, fps: fps, memoryUsage: memoryUsage)
             previousGetInfoTimestamp = Date().timeIntervalSince1970
+
+            let cpuReport = genCpuReport()
+            let memReport = genMemoryReport()
+            lastCpuReport = cpuReport
+            lastMemoryReport = memReport
+            reportCount += 1
+            self.reportV2(cpuReport: cpuReport, fps: fps, memoryReport: memReport)
         } else if let start = self.startTimestamp, Date().timeIntervalSince1970 - start >= Constants.accumulationTimeInSeconds {
             self.accumulatedInformationIsEnough = true
         }
+    }
+    
+    func genCpuReport() -> CpuReport {
+        let cpuUsage = self.cpuUsage()
+        let max = max(lastCpuReport?.max ?? 0, cpuUsage)
+        let min = min(lastCpuReport?.min ?? Double.infinity, cpuUsage)
+        let avg = ((lastCpuReport?.average ?? 0) * Double(reportCount) + cpuUsage) / Double(reportCount + 1)
+        
+        return CpuReport(usage: cpuUsage, average: avg, max: max, min: min)
+    }
+    
+    func genMemoryReport() -> MemoryReport {
+        let memoryUsage = self.memoryUsage()
+        let max = max(lastMemoryReport?.max ?? 0, Double(memoryUsage.used))
+        let min = min(lastMemoryReport?.min ?? Double.infinity, Double(memoryUsage.used))
+        let avg = ((lastMemoryReport?.average ?? 0) * Double(reportCount) + Double(memoryUsage.used)) / Double(reportCount + 1)
+        
+        return MemoryReport(usage: memoryUsage, average: avg, max: max, min: min)
     }
     
     func cpuUsage() -> Double {
@@ -163,5 +197,31 @@ private extension PerformanceCalculator {
     func report(cpuUsage: Double, fps: Int, memoryUsage: MemoryUsage) {
         let performanceReport = (cpuUsage: cpuUsage, fps: fps, memoryUsage: memoryUsage)
         self.onReport?(performanceReport)
+    }
+    
+    func reportV2(cpuReport: CpuReport, fps: Int, memoryReport: MemoryReport) {
+        if #available(iOS 11.0, *) {
+            let performanceReport = (cpuReport: cpuReport, fps: fps, memoryReport: memoryReport, thermalReport: ThermalReport(state: ProcessInfo.processInfo.thermalState.toState()))
+            self.onReportV2?(performanceReport)
+        } else {
+            let performanceReport = (cpuReport: cpuReport, fps: fps, memoryReport: memoryReport, thermalReport: ThermalReport(state: .unsupported))
+            self.onReportV2?(performanceReport)
+        }
+    }
+}
+
+@available(iOS 11.0, *)
+private extension ProcessInfo.ThermalState {
+    func toState() -> ThermalReport.state {
+        switch self {
+        case .nominal:
+            return .nominal
+        case .fair:
+            return .fair
+        case .serious:
+            return .serious
+        case .critical:
+            return .critical
+        }
     }
 }
