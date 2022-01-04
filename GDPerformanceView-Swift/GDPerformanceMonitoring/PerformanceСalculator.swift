@@ -21,6 +21,7 @@
 //
 
 import QuartzCore
+import UIKit
 
 // MARK: Class Definition
 
@@ -45,6 +46,7 @@ internal class PerformanceCalculator {
     private let linkedFramesList = LinkedFramesList()
     private var startTimestamp: TimeInterval?
     private var previousGetInfoTimestamp: TimeInterval?
+    private var previousLogInfoTimestamp: TimeInterval?
     private var accumulatedInformationIsEnough = false
     
     private var reportCount = 0
@@ -53,6 +55,20 @@ internal class PerformanceCalculator {
     
     private var lastCpuReport: CpuReport?
     private var lastMemoryReport: MemoryReport?
+    
+    lazy private var batteryLogger: FileLogger = {
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let documentsURL = URL(fileURLWithPath: documents)
+        let fileURL = documentsURL.appendingPathComponent("battery.log")
+        return FileLogger(with: fileURL)
+    }()
+    
+    lazy private var thermalLogger: FileLogger = {
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let documentsURL = URL(fileURLWithPath: documents)
+        let fileURL = documentsURL.appendingPathComponent("thermal.log")
+        return FileLogger(with: fileURL)
+    }()
     
     // MARK: Init Methods & Superclass Overriders
     
@@ -91,6 +107,14 @@ private extension PerformanceCalculator {
 
 private extension PerformanceCalculator {
     func takePerformanceEvidence() {
+        if self.accumulatedInformationIsEnough, Date().timeIntervalSince1970 - (previousLogInfoTimestamp ?? 0.0) >= 60.0 {
+            previousLogInfoTimestamp = Date().timeIntervalSince1970
+            batteryLogger.log(String(Int32(UIDevice.current.batteryLevel * 100)))
+            if #available(iOS 11.0, *) {
+                thermalLogger.log(String(ProcessInfo.processInfo.thermalState.rawValue))
+            }
+        }
+        
         if self.accumulatedInformationIsEnough, Date().timeIntervalSince1970 - (previousGetInfoTimestamp ?? 0.0) >= Constants.accumulationTimeInSeconds {
             let cpuUsage = self.cpuUsage()
             let fps = self.linkedFramesList.count

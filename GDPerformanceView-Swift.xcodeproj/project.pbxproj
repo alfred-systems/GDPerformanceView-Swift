@@ -28,6 +28,8 @@
 		42C2CBE81E244D6300A96A93 /* GDPerformanceView-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C2CBE61E244D6300A96A93 /* GDPerformanceView-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42C2CBEB1E244D6300A96A93 /* GDPerformanceView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2CBE41E244D6300A96A93 /* GDPerformanceView.framework */; };
 		42C2CBEC1E244D6300A96A93 /* GDPerformanceView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2CBE41E244D6300A96A93 /* GDPerformanceView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD50C5E927842BD1006E4CF8 /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50C5E827842BD1006E4CF8 /* FileLogger.swift */; };
+		AD50C5EA27842EAF006E4CF8 /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50C5E827842BD1006E4CF8 /* FileLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,7 @@
 		42C2CBE41E244D6300A96A93 /* GDPerformanceView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GDPerformanceView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C2CBE61E244D6300A96A93 /* GDPerformanceView-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GDPerformanceView-iOS.h"; sourceTree = "<group>"; };
 		42C2CBE71E244D6300A96A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD50C5E827842BD1006E4CF8 /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +136,7 @@
 				0C340AB121A348C600734F1C /* MarginLabel.swift */,
 				0C340AB321A348C600734F1C /* Protocols.swift */,
 				0C340AB421A348C600734F1C /* LinkedFramesList.swift */,
+				AD50C5E827842BD1006E4CF8 /* FileLogger.swift */,
 			);
 			path = GDPerformanceMonitoring;
 			sourceTree = "<group>";
@@ -269,6 +273,7 @@
 				0C340AC221A348C600734F1C /* PerformanceMonitor.swift in Sources */,
 				0C340AC421A348C600734F1C /* PerformanceСalculator.swift in Sources */,
 				0C340AC021A348C600734F1C /* WindowViewController.swift in Sources */,
+				AD50C5E927842BD1006E4CF8 /* FileLogger.swift in Sources */,
 				0C340AB821A348C600734F1C /* MarginLabel.swift in Sources */,
 				0C340ABA21A348C600734F1C /* PerformanceView.swift in Sources */,
 			);
@@ -281,6 +286,7 @@
 				0C340AC521A348C600734F1C /* PerformanceСalculator.swift in Sources */,
 				0C340AC121A348C600734F1C /* WindowViewController.swift in Sources */,
 				0C340AB921A348C600734F1C /* MarginLabel.swift in Sources */,
+				AD50C5EA27842EAF006E4CF8 /* FileLogger.swift in Sources */,
 				0C340ABB21A348C600734F1C /* PerformanceView.swift in Sources */,
 				0C340ABF21A348C600734F1C /* LinkedFramesList.swift in Sources */,
 				0C340AC321A348C600734F1C /* PerformanceMonitor.swift in Sources */,

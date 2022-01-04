@@ -168,6 +168,7 @@ public extension PerformanceMonitor {
             self.state = .started
             self.performanceCalculator.start()
         }
+        UIDevice.current.isBatteryMonitoringEnabled = true
     }
     
     @objc func pause() {
