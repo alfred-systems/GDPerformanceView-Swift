@@ -167,8 +167,8 @@ internal extension PerformanceView {
             let memory = String(format: "%.1f of %.0f MB used", usedMemory, totalMemory)
             monitoringTexts.append(memory)
             
-            monitoringTexts.append(String(format: "Max: %.1f MB", report.memoryReport.min / bytesInMegabyte))
             monitoringTexts.append(String(format: "Max: %.1f MB", report.memoryReport.max / bytesInMegabyte))
+            monitoringTexts.append(String(format: "Min: %.1f MB", report.memoryReport.min / bytesInMegabyte))
             monitoringTexts.append(String(format: "Avg: %.1f MB", report.memoryReport.average / bytesInMegabyte))
         }
         
