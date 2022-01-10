@@ -211,7 +211,7 @@ private extension PerformanceCalculator {
     func configureDisplayLink() {
         self.displayLink = CADisplayLink(target: self, selector: #selector(PerformanceCalculator.displayLinkAction(displayLink:)))
         self.displayLink.isPaused = true
-        self.displayLink?.add(to: .current, forMode: .commonModes)
+        self.displayLink?.add(to: .current, forMode: .common)
     }
 }
 
