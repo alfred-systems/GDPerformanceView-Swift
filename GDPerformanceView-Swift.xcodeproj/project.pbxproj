@@ -30,6 +30,8 @@
 		42C2CBEC1E244D6300A96A93 /* GDPerformanceView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C2CBE41E244D6300A96A93 /* GDPerformanceView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD50C5E927842BD1006E4CF8 /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50C5E827842BD1006E4CF8 /* FileLogger.swift */; };
 		AD50C5EA27842EAF006E4CF8 /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD50C5E827842BD1006E4CF8 /* FileLogger.swift */; };
+		AD836A5028B46AC80042FD4E /* DummyClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD836A4F28B46AC80042FD4E /* DummyClass.swift */; };
+		AD836A5228B46F320042FD4E /* DummyClass2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD836A5128B46F320042FD4E /* DummyClass2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,8 @@
 		42C2CBE61E244D6300A96A93 /* GDPerformanceView-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GDPerformanceView-iOS.h"; sourceTree = "<group>"; };
 		42C2CBE71E244D6300A96A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD50C5E827842BD1006E4CF8 /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
+		AD836A4F28B46AC80042FD4E /* DummyClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyClass.swift; sourceTree = "<group>"; };
+		AD836A5128B46F320042FD4E /* DummyClass2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyClass2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,7 @@
 		4237B6CF1E0FE2290059FF8B = {
 			isa = PBXGroup;
 			children = (
+				AD836A5128B46F320042FD4E /* DummyClass2.swift */,
 				42AD06E61E1D18C400A5C840 /* GDPerformanceView-Swift */,
 				42C2CBE51E244D6300A96A93 /* GDPerformanceView-iOS */,
 				4237B6D91E0FE22A0059FF8B /* Products */,
@@ -137,6 +142,7 @@
 				0C340AB321A348C600734F1C /* Protocols.swift */,
 				0C340AB421A348C600734F1C /* LinkedFramesList.swift */,
 				AD50C5E827842BD1006E4CF8 /* FileLogger.swift */,
+				AD836A4F28B46AC80042FD4E /* DummyClass.swift */,
 			);
 			path = GDPerformanceMonitoring;
 			sourceTree = "<group>";
@@ -270,10 +276,12 @@
 				0C340ABE21A348C600734F1C /* LinkedFramesList.swift in Sources */,
 				42AD06F31E1D18C400A5C840 /* AppDelegate.swift in Sources */,
 				0C340ABC21A348C600734F1C /* Protocols.swift in Sources */,
+				AD836A5028B46AC80042FD4E /* DummyClass.swift in Sources */,
 				0C340AC221A348C600734F1C /* PerformanceMonitor.swift in Sources */,
 				0C340AC421A348C600734F1C /* PerformanceСalculator.swift in Sources */,
 				0C340AC021A348C600734F1C /* WindowViewController.swift in Sources */,
 				AD50C5E927842BD1006E4CF8 /* FileLogger.swift in Sources */,
+				AD836A5228B46F320042FD4E /* DummyClass2.swift in Sources */,
 				0C340AB821A348C600734F1C /* MarginLabel.swift in Sources */,
 				0C340ABA21A348C600734F1C /* PerformanceView.swift in Sources */,
 			);
